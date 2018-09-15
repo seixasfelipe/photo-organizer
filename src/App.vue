@@ -1,25 +1,11 @@
 <template>
   <div class="container">
-    <!-- <section class="photo-selected">
-      <img :src="getCurrent().path">
-    </section> -->
-    <!-- <photo-list :photos="getPhotos()" :next="next" :previous="previous"></photo-list> -->
-
-    <section class="main-photo" v-on:keyup.d="deletePhoto">
+    <section class="main-photo">
       <div class="nav-button" @click="previous()">&#8249;</div>
-      <img :src="resolveUrl(selected().id, 800, 600)">
+      <img :src="currentPhotoUrl">
       <div class="nav-button" @click="next()">&#8250;</div>
     </section>
-    <aside class="photo-list">
-      <ul>
-        <li v-for="photo in photos" :key="photo.id" :class="{deleted:isDeleted(photo.id), selected:isSelected(photo.id)}">
-          <img :src="resolveUrl(photo.id, 120, 90)">
-        </li>
-      </ul>
-    </aside>
-    <section class="debug">
-      <p>{{ currentIndex }} | {{ isDeleted(selected().id) }}</p>
-    </section>
+    <photo-list :resolveUrl="resolveUrl" @photo-selected="onPhotoSelected" ref="photoList"></photo-list>
   </div>
 </template>
 
@@ -36,64 +22,26 @@ export default {
 
   data () {
     return {
-      currentIndex: 0,
-      next() {
-        this.currentIndex = Math.min(this.currentIndex + 1, this.photos.length - 1);
-      },
-      previous() {
-        this.currentIndex = Math.max(this.currentIndex - 1, 0);
-      },
-      deletePhoto() {
-        this.photos[this.currentIndex].deleted = !this.photos[this.currentIndex].deleted;
-        this.next();
-      },
-      isDeleted(id) {
-        return this.photos.find(function(e) { return e.id === id && e.deleted});
-      },
-      isSelected(id) {
-        return this.selected().id === id;
-      },
-      selected() {
-          return this.photos[this.currentIndex];
-      },
-      photos: [
-        {id:524},
-        {id:525},
-        {id:526},
-        {id:527},
-        {id:528},
-        {id:529},
-        {id:530},
-        {id:531},
-        {id:532},
-        {id:533},
-        {id:534},
-        {id:535},
-        {id:536},
-        {id:537},
-        {id:538},
-        {id:539}
-      ],
+      currentPhotoUrl: ''
     }
-  },
-
-  mounted() {
-    window.addEventListener('keydown', (e) => {
-      var key = e.which || e.keyCode;
-      if (key === 39) { // RIGHT
-        this.next();
-      } else if (key === 37) { // LEFT
-        this.previous();
-      } else if (key === 68) { // D
-        this.deletePhoto();
-      }
-    });
   },
 
   methods: {
     resolveUrl(id, width, height) {
       return `https://picsum.photos/${width}/${height}/?image=${id}`;
-    }
+    },
+
+    next() {
+      this.$refs.photoList.next();
+    },
+
+    previous() {
+      this.$refs.photoList.previous();
+    },
+
+    onPhotoSelected(id) {
+      this.currentPhotoUrl = this.resolveUrl(id, 800, 600);
+    },
   }
 }
 </script>
