@@ -90,6 +90,10 @@ li {
   display: inline-block;
 }
 
+li img {
+  height: 60px;
+}
+
 li.deleted img {
   box-sizing: border-box;
   border: 2px solid #F00;

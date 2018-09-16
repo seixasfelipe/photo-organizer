@@ -1,7 +1,12 @@
 <template>
   <section class="photo-list">
     <ul>
-      <photo-list-item v-for="photo in photos" :key="photo.id" :resolveUrl="resolveUrl" :item="photo"></photo-list-item>
+      <photo-list-item v-for="photo in photos"
+        :key="photo.id"
+        :resolveUrl="resolveUrl"
+        :item="photo"
+        @click.native="selectPhoto(photo.id)">
+      </photo-list-item>
     </ul>
   </section>
 </template>
@@ -50,7 +55,7 @@ export default {
       } else if (key === 37) { // LEFT
         this.previous();
       } else if (key === 68) { // D
-        this.markToDelete();
+        this.markAsDeleted();
       }
     });
 
@@ -59,18 +64,16 @@ export default {
 
   methods: {
     next () {
-      this.unselect(this.currentIndex);
-      this.currentIndex = Math.min(this.currentIndex + 1, this.photos.length - 1);
-      this.select(this.currentIndex);
+      const newIndex = Math.min(this.currentIndex + 1, this.photos.length - 1);
+      this.select(newIndex);
     },
 
     previous () {
-      this.unselect(this.currentIndex);
-      this.currentIndex = Math.max(this.currentIndex - 1, 0);
-      this.select(this.currentIndex);
+      const newIndex = Math.max(this.currentIndex - 1, 0);
+      this.select(newIndex);
     },
 
-    markToDelete () {
+    markAsDeleted () {
       this.photos[this.currentIndex].deleted = !this.photos[this.currentIndex].deleted;
     },
 
@@ -79,9 +82,17 @@ export default {
     },
 
     select(index) {
+      this.unselect(this.currentIndex);
+      this.currentIndex = index;
+
       console.log(this.photos[index].id);
       this.photos[index].selected = true;
       this.$emit('photo-selected', this.photos[index].id);
+    },
+
+    selectPhoto(id) {
+      const index = this.photos.findIndex(p => p.id === id);
+      this.select(index);
     }
   }
 }
