@@ -23,7 +23,7 @@ export default {
   data () {
     return {
       currentPhotoUrl: ''
-    }
+    },
   },
 
   methods: {
@@ -42,8 +42,8 @@ export default {
     onPhotoSelected(id) {
       this.currentPhotoUrl = this.resolveUrl(id, 800, 600);
     },
-  }
-}
+  },
+};
 </script>
 
 <style>

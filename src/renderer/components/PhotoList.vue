@@ -49,7 +49,7 @@ export default {
 
   created() {
     window.addEventListener('keydown', (e) => {
-      var key = e.which || e.keyCode;
+      let key = e.which || e.keyCode;
       if (key === 39) { // RIGHT
         this.next();
       } else if (key === 37) { // LEFT
@@ -63,17 +63,17 @@ export default {
   },
 
   methods: {
-    next () {
+    next() {
       const newIndex = Math.min(this.currentIndex + 1, this.photos.length - 1);
       this.select(newIndex);
     },
 
-    previous () {
+    previous() {
       const newIndex = Math.max(this.currentIndex - 1, 0);
       this.select(newIndex);
     },
 
-    markAsDeleted () {
+    markAsDeleted() {
       this.photos[this.currentIndex].deleted = !this.photos[this.currentIndex].deleted;
     },
 
@@ -93,8 +93,8 @@ export default {
     selectPhoto(id) {
       const index = this.photos.findIndex(p => p.id === id);
       this.select(index);
-    }
-  }
-}
+    },
+  },
+};
 
 </script>
