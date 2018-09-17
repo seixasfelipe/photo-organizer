@@ -10,15 +10,13 @@ export default {
   props: ['item', 'resolveUrl'],
 
   computed: {
-    isSelected () {
-      console.log(`isSelected ${this.item.selected}`);
+    isSelected() {
       return this.item.selected;
     },
 
-    isDeleted () {
+    isDeleted() {
       return this.item.deleted;
-    }
-  }
-}
-
+    },
+  },
+};
 </script>

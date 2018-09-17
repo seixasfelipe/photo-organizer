@@ -17,13 +17,13 @@ export default {
   name: 'app',
 
   components: {
-    PhotoList
+    PhotoList,
   },
 
-  data () {
+  data() {
     return {
-      currentPhotoUrl: ''
-    },
+      currentPhotoUrl: '',
+    };
   },
 
   methods: {

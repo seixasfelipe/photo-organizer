@@ -19,37 +19,37 @@ export default {
   props: ['resolveUrl'],
 
   components: {
-    PhotoListItem
+    PhotoListItem,
   },
 
-  data () {
+  data() {
     return {
-      currentIndex:0,
+      currentIndex: 0,
 
       photos: [
-        {id:524, selected:false, deleted:false},
-        {id:525, selected:false, deleted:false},
-        {id:526, selected:false, deleted:false},
-        {id:527, selected:false, deleted:false},
-        {id:528, selected:false, deleted:false},
-        {id:529, selected:false, deleted:false},
-        {id:530, selected:false, deleted:false},
-        {id:531, selected:false, deleted:false},
-        {id:532, selected:false, deleted:false},
-        {id:533, selected:false, deleted:false},
-        {id:534, selected:false, deleted:false},
-        {id:535, selected:false, deleted:false},
-        {id:536, selected:false, deleted:false},
-        {id:537, selected:false, deleted:false},
-        {id:538, selected:false, deleted:false},
-        {id:539, selected:false, deleted:false}
-      ]
-    }
+        { id: 524, selected: false, deleted: false },
+        { id: 525, selected: false, deleted: false },
+        { id: 526, selected: false, deleted: false },
+        { id: 527, selected: false, deleted: false },
+        { id: 528, selected: false, deleted: false },
+        { id: 529, selected: false, deleted: false },
+        { id: 530, selected: false, deleted: false },
+        { id: 531, selected: false, deleted: false },
+        { id: 532, selected: false, deleted: false },
+        { id: 533, selected: false, deleted: false },
+        { id: 534, selected: false, deleted: false },
+        { id: 535, selected: false, deleted: false },
+        { id: 536, selected: false, deleted: false },
+        { id: 537, selected: false, deleted: false },
+        { id: 538, selected: false, deleted: false },
+        { id: 539, selected: false, deleted: false },
+      ],
+    };
   },
 
   created() {
     window.addEventListener('keydown', (e) => {
-      let key = e.which || e.keyCode;
+      const key = e.which || e.keyCode;
       if (key === 39) { // RIGHT
         this.next();
       } else if (key === 37) { // LEFT
@@ -85,7 +85,6 @@ export default {
       this.unselect(this.currentIndex);
       this.currentIndex = index;
 
-      console.log(this.photos[index].id);
       this.photos[index].selected = true;
       this.$emit('photo-selected', this.photos[index].id);
     },
@@ -96,5 +95,4 @@ export default {
     },
   },
 };
-
 </script>
