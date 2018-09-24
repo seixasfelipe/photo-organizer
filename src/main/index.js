@@ -1,4 +1,6 @@
-import { app, BrowserWindow } from 'electron' // eslint-disable-line
+import { app, BrowserWindow, ipcMain, dialog } from 'electron' // eslint-disable-line
+import fs from 'fs';
+import path from 'path';
 
 /**
  * Set `__static` path to static files in production
@@ -21,6 +23,9 @@ function createWindow() {
     height: 870,
     useContentSize: true,
     width: 1024,
+    webPreferences: {
+      webSecurity: false,
+    },
   });
 
   mainWindow.loadURL(winURL);
@@ -41,6 +46,36 @@ app.on('window-all-closed', () => {
 app.on('activate', () => {
   if (mainWindow === null) {
     createWindow();
+  }
+});
+
+ipcMain.on('select-folder', (event) => {
+  const result = dialog.showOpenDialog({
+    properties: ['openDirectory', 'multiSelections'], /* 'openFile', 'multiSelections'], */
+    // filters: [
+    //   { name: 'Photos', extensions: ['jpg', 'png'] },
+    // ],
+  });
+
+  if (typeof result === 'object') {
+    const p = result[0];
+    fs.readdir(p, { withFileTypes: true }, (err, files) => {
+      if (err) throw err;
+
+      const fileList = [];
+
+      files.map(file => path.join(p, file)).filter(
+        file => fs.statSync(file).isFile(),
+      ).forEach(
+        file => fileList.push({
+          id: path.basename(file, path.extname(file)), src: file, selected: false, deleted: false,
+        }),
+      );
+
+      event.returnValue = fileList;
+    });
+  } else {
+    event.returnValue = [];
   }
 });
 

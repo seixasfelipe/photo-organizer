@@ -2,15 +2,17 @@
   <div class="container">
     <section class="main-photo">
       <div class="nav-button" @click="previous()">&#8249;</div>
-      <img :src="currentPhotoUrl">
+      <img :src="currentPhotoUrl" v-if="isVisible">
+      <button @click="openDialog()" v-if="!isVisible">Load photos</button>
       <div class="nav-button" @click="next()">&#8250;</div>
     </section>
-    <photo-list :resolveUrl="resolveUrl" @photo-selected="onPhotoSelected" ref="photoList"></photo-list>
+    <photo-list v-if="isVisible" @photo-selected="onPhotoSelected" ref="photoList" :photos="photos"></photo-list>
   </div>
 </template>
 
 <script>
 
+import { ipcRenderer } from 'electron'; // eslint-disable-line
 import PhotoList from './components/PhotoList.vue';
 
 export default {
@@ -23,14 +25,17 @@ export default {
   data() {
     return {
       currentPhotoUrl: '',
+      photos: [],
     };
   },
 
-  methods: {
-    resolveUrl(id, width, height) {
-      return `https://picsum.photos/${width}/${height}/?image=${id}`;
+  computed: {
+    isVisible() {
+      return this.photos.length > 0;
     },
+  },
 
+  methods: {
     next() {
       this.$refs.photoList.next();
     },
@@ -39,8 +44,15 @@ export default {
       this.$refs.photoList.previous();
     },
 
-    onPhotoSelected(id) {
-      this.currentPhotoUrl = this.resolveUrl(id, 800, 600);
+    onPhotoSelected(url) {
+      this.currentPhotoUrl = url;
+    },
+
+    openDialog() {
+      const response = ipcRenderer.sendSync('select-folder');
+      if (response.length > 0) {
+        this.photos = response;
+      }
     },
   },
 };

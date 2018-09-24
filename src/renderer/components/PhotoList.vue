@@ -3,7 +3,6 @@
     <ul>
       <photo-list-item v-for="photo in photos"
         :key="photo.id"
-        :resolveUrl="resolveUrl"
         :item="photo"
         @click.native="selectPhoto(photo.id)">
       </photo-list-item>
@@ -16,7 +15,7 @@
 import PhotoListItem from './PhotoListItem.vue';
 
 export default {
-  props: ['resolveUrl'],
+  props: ['photos'],
 
   components: {
     PhotoListItem,
@@ -25,25 +24,6 @@ export default {
   data() {
     return {
       currentIndex: 0,
-
-      photos: [
-        { id: 524, selected: false, deleted: false },
-        { id: 525, selected: false, deleted: false },
-        { id: 526, selected: false, deleted: false },
-        { id: 527, selected: false, deleted: false },
-        { id: 528, selected: false, deleted: false },
-        { id: 529, selected: false, deleted: false },
-        { id: 530, selected: false, deleted: false },
-        { id: 531, selected: false, deleted: false },
-        { id: 532, selected: false, deleted: false },
-        { id: 533, selected: false, deleted: false },
-        { id: 534, selected: false, deleted: false },
-        { id: 535, selected: false, deleted: false },
-        { id: 536, selected: false, deleted: false },
-        { id: 537, selected: false, deleted: false },
-        { id: 538, selected: false, deleted: false },
-        { id: 539, selected: false, deleted: false },
-      ],
     };
   },
 
@@ -86,12 +66,14 @@ export default {
       this.currentIndex = index;
 
       this.photos[index].selected = true;
-      this.$emit('photo-selected', this.photos[index].id);
+      this.$emit('photo-selected', this.photos[index].src);
     },
 
     selectPhoto(id) {
-      const index = this.photos.findIndex(p => p.id === id);
-      this.select(index);
+      if (this.photos.length > 0) {
+        const index = this.photos.findIndex(p => p.id === id);
+        this.select(index);
+      }
     },
   },
 };

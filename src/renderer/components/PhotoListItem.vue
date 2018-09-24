@@ -1,13 +1,13 @@
 <template>
   <li :class="{deleted:isDeleted, selected:isSelected}">
-    <img :src="resolveUrl(item.id, 120, 90)">
+    <img :src="item.src">
   </li>
 </template>
 
 <script>
 
 export default {
-  props: ['item', 'resolveUrl'],
+  props: ['item'],
 
   computed: {
     isSelected() {
