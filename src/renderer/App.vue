@@ -1,12 +1,16 @@
 <template>
   <div class="container">
-    <section class="main-photo">
-      <div class="nav-button" @click="previous()">&#8249;</div>
-      <img :src="currentPhotoUrl" v-if="isVisible">
-      <button @click="openDialog()" v-if="!isVisible">Load photos</button>
-      <div class="nav-button" @click="next()">&#8250;</div>
+    <section v-if="hasPhotos">
+      <div class="main-photo">
+        <div class="nav-button" @click="previous()">&#8249;</div>
+        <img :src="currentPhotoUrl">
+        <div class="nav-button" @click="next()">&#8250;</div>
+      </div>
+      <photo-list @photo-selected="onPhotoSelected" ref="photoList" :photos="photos"></photo-list>
     </section>
-    <photo-list v-if="isVisible" @photo-selected="onPhotoSelected" ref="photoList" :photos="photos"></photo-list>
+    <section class="no-photos" v-if="!hasPhotos">
+      <button @click="openDialog()">Search photos</button>
+    </section>
   </div>
 </template>
 
@@ -30,7 +34,7 @@ export default {
   },
 
   computed: {
-    isVisible() {
+    hasPhotos() {
       return this.photos.length > 0;
     },
   },
@@ -91,6 +95,27 @@ ul {
 /*--------------------------------------------------------------
 CSS App
 --------------------------------------------------------------*/
+.no-photos {
+  /* background-color: #E6E6E6; */
+  margin-top: 250px;
+}
+
+.no-photos button {
+  text-decoration: none;
+  color: #fff;
+  background-color: #26a69a;
+  text-align: center;
+  letter-spacing: .5px;
+  font-size: 14px;
+  outline: 0;
+  border: none;
+  border-radius: 2px;
+  height: 36px;
+  line-height: 36px;
+  padding: 0 16px;
+  text-transform: uppercase;
+}
+
 ul {
   padding: 0.5em;
   /* display: inline-flex; */
@@ -115,11 +140,11 @@ li.selected {
   background-color: #A3A3A3;
 }
 
-/* .container {
+.container {
   display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-} */
+  flex-direction: center;
+  justify-content: center;
+}
 
 .main-photo {
   padding: 3em 1.5em;

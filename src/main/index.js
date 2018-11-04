@@ -1,6 +1,7 @@
 import { app, BrowserWindow, ipcMain, dialog } from 'electron' // eslint-disable-line
 import fs from 'fs';
 import path from 'path';
+import { URL } from 'url';
 
 /**
  * Set `__static` path to static files in production
@@ -63,12 +64,13 @@ ipcMain.on('select-folder', (event) => {
       if (err) throw err;
 
       const fileList = [];
+      const isPhoto = file => ['.png', '.jpg', '.jpeg'].includes(path.extname(file).toLowerCase());
 
       files.map(file => path.join(p, file)).filter(
-        file => fs.statSync(file).isFile(),
+        file => fs.statSync(file).isFile() && isPhoto(file),
       ).forEach(
         file => fileList.push({
-          id: path.basename(file, path.extname(file)), src: file, selected: false, deleted: false,
+          id: path.basename(file, path.extname(file)), src: new URL(file, 'file://'), selected: false, deleted: false,
         }),
       );
 
